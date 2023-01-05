@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="dao.RoomDao">
+
+	<!-- 방 만들기 int insertRoom(Room room); -->
+	<insert id="insertRoom" parameterType="vo.Room">
+		insert into room(roomno, roomname) 
+		values(room_seq.nextval, #{roomname})
+	</insert>
+	
+	<!-- 전체 방 리스트 출력 List<Room> getRoomList(); -->
+	<select id="getRoomList" resultType="vo.Room">
+		select roomno, roomname, roomdate from room
+	</select>
+	
+	<!-- 방 삭제 int deleteRoom(String roomno); -->
+	<delete id="deleteRoom">
+		delete from room where roomno = #{roomno}
+	</delete>
+	
+	<!-- 채팅 방 검색 Room searchRoom(int roomno) -->
+	<select id="searchRoom" parameterType="int" resultType="vo.Room">
+		select * from room where roomno = #{roomno}
+	</select>
+	
+	<!-- 채팅방 입장 전 중복 검사 int enterCheck(Roominuser roominuser) -->
+	<select id="enterCheck" parameterType="vo.Roominuser" resultType="int">
+		select count(*) from roominuser where userid=#{userid} and roomno=#{roomno}
+	</select>
+
+	<!-- 채팅방 입장 int enterRoom(Roominuser roominuser) -->
+	<insert id="enterRoom" parameterType="vo.Roominuser">
+		insert into roominuser(userid, roomno)
+			values(#{userid}, #{roomno})
+	</insert>
+	
+	<!-- 채팅방 퇴장  int exitRoom(Roominuser roominuser) -->
+	<delete id="exitRoom" parameterType="vo.Roominuser">
+		delete from roominuser where userid=#{userid} and roomno=#{roomno}
+	</delete>
+
+</mapper>

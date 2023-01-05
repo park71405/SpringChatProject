@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="dao.KanbanDao">
+
+	<!-- List<Kanban> getKanbanList() -->
+	<select id="getKanbanList" resultType="vo.Kanban">
+		select k_no, k_title, k_regdate, k_contain, k_location from kanban
+		order by k_location
+	</select>
+
+	<!-- public int updateKanban(Kanban k) -->
+	<update id="updateKanban" parameterType="vo.Kanban">
+		update kanban
+		set k_title=#{k_title}
+		where k_no=#{k_no}
+	</update>
+	
+	<!-- public int updateLocation(Kanban k) -->
+	<update id="updateLocation" parameterType="vo.Kanban">
+		update kanban
+		set k_location=#{k_location}, k_contain=#{k_contain}
+		where k_title=#{k_title}
+	</update>
+	
+	<!-- public int deleteKanban(String k_no) -->
+	<delete id="deleteKanban">
+		delete from kanban where k_no = #{k_no}	
+	</delete>
+	
+	<!-- public int insertKanban(Kanban k) -->
+	<insert id="insertKanban" parameterType="vo.Kanban">
+		insert into kanban(k_no, k_title, k_contain, k_location) 
+    	values(kanban_seq.nextval, #{k_title}, #{k_contain}, (select max(k_no)+1 from kanban where k_contain = 'todo'))
+	</insert>
+
+</mapper>
