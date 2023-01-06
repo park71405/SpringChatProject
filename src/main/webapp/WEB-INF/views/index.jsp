@@ -26,6 +26,8 @@
 	</se:authorize>
 	<hr />
 	<a href="${pageContext.request.contextPath}/chatroom.htm">채팅 방 입장</a><br>
+	<hr />
+	<a href="${pageContext.request.contextPath}/memberlist.htm">1:1 채팅</a><br>
 	
 </body>
 </html>

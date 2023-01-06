@@ -3,6 +3,7 @@ package dao;
 import java.sql.SQLException;
 import java.util.List;
 
+import vo.Message;
 import vo.Room;
 import vo.Roominuser;
 
@@ -28,5 +29,11 @@ public interface RoomDao {
 	
 	//채팅방 퇴장
 	int exitRoom(Roominuser roominuser) throws ClassNotFoundException, SQLException;
+
+	//메시지 추가
+	int sendMessage(Message message) throws ClassNotFoundException, SQLException;
+	
+	//해당 방의 기존 메시지 읽어오기
+	List<Message> getMessageListByRoomno(int roomno) throws ClassNotFoundException, SQLException;
 	
 }

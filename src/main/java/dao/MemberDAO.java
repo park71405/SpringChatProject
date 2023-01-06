@@ -1,5 +1,8 @@
 package dao;
 
+import java.sql.SQLException;
+import java.util.List;
+
 import vo.Member;
 
 public interface MemberDAO {
@@ -16,6 +19,7 @@ public interface MemberDAO {
 	//회원수정
 	public int updateMember(Member member);
 	
-	
+	//회원 전체 조회
+	public List<Member> getMemberList() throws ClassNotFoundException, SQLException;;
 
 }

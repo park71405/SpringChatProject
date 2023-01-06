@@ -101,6 +101,15 @@ public class AjaxController {
 		
 		return str;
 	}
+	
+	//기존 메시지 불러오기
+	@RequestMapping(value="preRoom.htm", method=RequestMethod.POST)
+	public List<Message> preRoom(@RequestBody Message message) {
+		
+		List<Message> list = chatservice.getMessageListByRoomno(message.getRoomno());
+		
+		return list;
+	}
 
 	//Client가 SEND할 수 있는 경로
 	//stompConfig에서 설정한 applicationDestinationPrefixes와 @MessageMapping 경로가 병합됨
@@ -120,7 +129,19 @@ public class AjaxController {
 	
 	@MessageMapping(value = "/chat/message")
     public void message(Message message){
+		
+		chatservice.sendMessage(message);
+		
         template.convertAndSend("/sub/chat/room/" + message.getRoomno(), message);
     }
+	
+	@MessageMapping(value="/chat/note")
+	public void note(Message message) {
+		
+		chatservice.sendMessage(message);
+		
+		System.out.println("쪽지 보냅니다!");
+		
+	}
 	
 }

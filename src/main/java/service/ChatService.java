@@ -7,8 +7,10 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import dao.KanbanDao;
+import dao.MemberDAO;
 import dao.RoomDao;
+import vo.Member;
+import vo.Message;
 import vo.Room;
 import vo.Roominuser;
 
@@ -92,21 +94,21 @@ public class ChatService {
 
 		return room;
 	}
-	
-	//채팅방 입장
+
+	// 채팅방 입장
 	public int enterRoom(Roominuser roominuser) {
 		int result = 0;
 
 		try {
 
 			RoomDao roomdao = sqlsession.getMapper(RoomDao.class);
-			
+
 			int tmp_result = roomdao.enterCheck(roominuser);
-			
-			if(tmp_result == 0) {
+
+			if (tmp_result == 0) {
 				result = roomdao.enterRoom(roominuser);
 			}
-			
+
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
@@ -115,8 +117,8 @@ public class ChatService {
 
 		return result;
 	}
-	
-	//채팅방 퇴장
+
+	// 채팅방 퇴장
 	public int exitRoom(Roominuser roominuser) {
 		int result = 0;
 
@@ -124,7 +126,7 @@ public class ChatService {
 
 			RoomDao roomdao = sqlsession.getMapper(RoomDao.class);
 			result = roomdao.exitRoom(roominuser);
-			
+
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
@@ -133,5 +135,55 @@ public class ChatService {
 
 		return result;
 	}
+
+	// 채팅 가능한 회원 리스트 조회
+	public List<Member> getMemberList() {
+		List<Member> list = null;
+		try {
+			
+			MemberDAO memberdao = sqlsession.getMapper(MemberDAO.class);
+			list = memberdao.getMemberList();
+			
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return list;
+	}
 	
+	//쪽지 보내기
+	public int sendMessage(Message message) {
+		int result = 0;
+		
+		try {
+			
+			RoomDao roomdao = sqlsession.getMapper(RoomDao.class);
+			result = roomdao.sendMessage(message);
+			
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+	
+	//해당 방의 기존 메시지 읽어오기 
+	public List<Message> getMessageListByRoomno(int roomno){
+		List<Message> list = null;
+		try {
+			RoomDao roomdao = sqlsession.getMapper(RoomDao.class);
+			list = roomdao.getMessageListByRoomno(roomno);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return list;
+	}
+
 }

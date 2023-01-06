@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import service.ChatService;
+import vo.Member;
 import vo.Room;
 
 @Controller
@@ -31,6 +32,9 @@ public class ChatController {
 	
 	@RequestMapping("/memberlist.htm")
 	public String memberlistView(Model model) {
+		
+		List<Member> list = chatservice.getMemberList();
+		model.addAttribute("list", list);
 		
 		return "chat/memberlist";
 	}

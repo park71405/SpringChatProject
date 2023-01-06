@@ -41,5 +41,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<delete id="exitRoom" parameterType="vo.Roominuser">
 		delete from roominuser where userid=#{userid} and roomno=#{roomno}
 	</delete>
+	
+	<!-- 메시지 보내기 int sendMessage(Message message) -->
+	<insert id="sendMessage" parameterType="vo.Message">
+		insert into message(messageno, content, to_userid, userid, roomno)
+			values(message_seq.nextval, #{content}, #{to_userid}, #{userid}, #{roomno})
+	</insert>
+	
+	<!-- 해당 방의 기존 메시지 읽어오기 List<Message> getMessageListByRoomno(int roomno) -->
+	<select id="getMessageListByRoomno" parameterType="int" resultType="vo.Message">
+		select * from message where roomno = #{roomno}
+	</select>
 
 </mapper>

@@ -43,14 +43,16 @@
 						$("#roomlist").empty();
 						let html = "";
 						$.each(data, function(){
-							html += '<li><div class="ps-5 enterroombtn">';
-							html += '<input type="hidden" class="roomNo" value="'+this.roomno+'">';
-							html += '<h2>'+ this.roomname +'</h2>';
-							html += '</div>';
-							if(this.host == username){
-								html += '<div class="ps-5 deleteroombtn"><h2><i class="bi bi-x-circle"></i></h2></div>';	
+							if(this.roomno != 0){
+								html += '<li><div class="ps-5 enterroombtn">';
+								html += '<input type="hidden" class="roomNo" value="'+this.roomno+'">';
+								html += '<h2>'+ this.roomname +'</h2>';
+								html += '</div>';
+								if(this.host == username){
+									html += '<div class="ps-5 deleteroombtn"><h2><i class="bi bi-x-circle"></i></h2></div>';	
+								}
+								html += '</li>';	
 							}
-							html += '</li>';
 						});
 						$("#roomlist").append(html);
 					}
@@ -104,7 +106,7 @@
 				let roomno = $("#chat-no").text(); //채팅방 번호
 				let msg = $("#inputmessage").val();
 				if(msg.trim() != ""){
-					let data = JSON.stringify({roomno: roomno, content: msg, userid: username});
+					let data = JSON.stringify({roomno: roomno, content: msg, to_userid: "all", userid: username});
 					stomp.send('/pub/chat/message', {}, data);
 				}
 				$("#inputmessage").val("");
@@ -152,6 +154,56 @@
 				
 			}
 			
+			//기존 메시지 불러오기
+			function preMessage(roomno){
+				let requestdata = {"roomno": roomno};
+				let data = JSON.stringify(requestdata);
+				$.ajax({
+					type: "post",
+					url: "preRoom.htm",
+					data: data,
+					dataType: "text",
+					contentType: "application/json; charset=utf-8",
+					success: function(data1){
+						
+						console.log(data1);
+						
+						let data = JSON.parse(data1);
+						console.log(data);
+						
+						$.each(data, function(){
+							let msgbox;
+							if(this.userid == username){
+								msgbox = '<li class="me">';
+								msgbox += '<div class="entete">';
+								msgbox += '<h3>'+ this.messagedate +'</h3>';
+								msgbox += '<h2>'+ username + '</h2>';
+								msgbox += '<span class="status blue"></span>';
+								msgbox += '</div>';
+								msgbox += '<div class="triangle"></div>';
+								msgbox += '<div class="message">';
+								msgbox += this.content;
+								msgbox += '</div>';
+								msgbox += '</li>';
+							}else{
+								msgbox = '<li class="you">';
+								msgbox += '<div class="entete">';
+								msgbox += '<span class="status green"></span>';
+								msgbox += '<h2>'+ this.userid+'</h2>';
+								msgbox += '<h3>'+ this.messagedate +'</h3>';
+								msgbox += '</div>';
+								msgbox += '<div class="triangle"></div>';
+								msgbox += '<div class="message">';
+								msgbox += this.content;
+								msgbox += '</div>';
+								msgbox += '</li>';
+							}
+							$("#chat").append(msgbox);
+						});
+					}
+				});
+			}
+			
 			//메시지 전송
 			$(document).on('click', '#sendbtn', function(){
 				send();
@@ -159,6 +211,9 @@
 			
 			//채팅방 입장
 			$(document).on('click', '.enterroombtn', function(){
+				
+				$("#chat").empty();
+				
 				let room1 = $(this).children('.roomNo');
 				let roomno = $(room1).val();
 				let room2 = $(this).children('h2');
@@ -174,6 +229,10 @@
 				let roomno_dis = $("#chat-no").text(); //채팅방 번호
 				disconnect(roomno_dis);
 				connect();
+				
+				//기존 메시지 불러오기
+				console.log(roomno);
+				preMessage(roomno);
 			});
 			
 			//채팅방 퇴장
@@ -281,28 +340,7 @@
 			
 			<div id="realchat" class="visually-hidden">
 				<ul id="chat">
-					<li class="you">
-						<div class="entete">
-							<span class="status green"></span>
-							<h2>Vincent</h2>
-							<h3>10:12AM, Today</h3>
-						</div>
-						<div class="triangle"></div>
-						<div class="message">
-							여기는 메시지 내용 적는 부분입니다!!!!	
-						</div>
-					</li>
-					<li class="me">
-						<div class="entete">
-							<h3>10:12AM, Today</h3>
-							<h2>Vincent</h2>
-							<span class="status blue"></span>
-						</div>
-						<div class="triangle"></div>
-						<div class="message">
-							여기도 메시지 적는 부분인데 이제 내가 보낸 메시지 나타날거임!!!!
-						</div>
-					</li>
+					
 				</ul>
 				
 				<footer>

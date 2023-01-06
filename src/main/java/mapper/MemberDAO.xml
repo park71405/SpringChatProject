@@ -28,4 +28,10 @@
 		where userid = #{userid}
 	</update>
 	
+	<!-- 모는 회원 조회 public List<Member> getMemberList(); -->
+	<select id="getMemberList" resultType="vo.Member">
+		select * from member
+	</select>
+	
+	
 </mapper>

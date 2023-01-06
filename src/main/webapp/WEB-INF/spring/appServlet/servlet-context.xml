@@ -21,10 +21,10 @@
 	<context:component-scan base-package="vo"  />
 
 	<websocket:message-broker application-destination-prefix="/pub" >
-        <websocket:stomp-endpoint path="/chat" allowed-origins="192.168.0.65:8090/kosa/chat"> <!-- 웹소켓 핸드셰이크 커넥션을 생성할 경로 -->
+        <websocket:stomp-endpoint path="/chat" allowed-origins="192.168.0.156:8090/kosa/chat"> <!-- 웹소켓 핸드셰이크 커넥션을 생성할 경로 -->
             <websocket:sockjs websocket-enabled="true" />
         </websocket:stomp-endpoint>
-        <websocket:simple-broker prefix="/sub" />
+        <websocket:simple-broker prefix="/sub, /one" />
     </websocket:message-broker>
 	
 	<mvc:resources mapping="/resources/**" location="/resources/" />
