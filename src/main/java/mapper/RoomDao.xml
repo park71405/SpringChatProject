@@ -52,5 +52,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="getMessageListByRoomno" parameterType="int" resultType="vo.Message">
 		select * from message where roomno = #{roomno}
 	</select>
+	
+	<!-- 쪽지 읽기 List<Message> getNoteByUserid(String to_userid)  -->
+	<select id="getNoteByUserid" parameterType="String" resultType="vo.Message">
+		select * from message where to_userid=#{to_userid} and to_userid != 'all' and m_check = 0
+	</select>
+	
+	<!-- 쪽지 읽음 처리 int readNote(String to_userid) -->
+	<update id="readNote" parameterType="String">
+		update message
+		set m_check=1
+		where to_userid = #{to_userid}
+	</update>
 
 </mapper>

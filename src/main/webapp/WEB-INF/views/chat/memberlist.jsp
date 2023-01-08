@@ -61,6 +61,21 @@
 				$("#page-wrapper").addClass('visually-hidden');
 			}
 			
+			//Send Message 버튼 클릭
+			$(document).on('click', '#mysend', function(){
+				
+				let divtag = $(this).closest("#page-wrapper");
+				let ch = $(divtag).children("#to_mem");
+				let text = $(ch).html();
+				
+				let sp = text.split(":");
+				
+				let userid = sp[1].trim();
+				
+				send(userid);
+				
+			});
+			
 			//쪽지 보내기 버튼 클릭
 			$(document).on('click', '.btn', function(){
 				
@@ -95,12 +110,12 @@
 
 		<ul id="messages"></ul>
 
-		<form id="message-form" action="#" method="post">
+		<div id="message-form" >
 			<textarea id="message" placeholder="Write your message here..."
 				required></textarea>
-			<button type="submit">Send Message</button>
+			<button id="mysend" type="submit">Send Message</button>
 			<button type="button" id="myclose">Close Connection</button>
-		</form>
+		</div>
 	</div>
 
 	<table class="table table-striped m-3 p-5">

@@ -185,5 +185,36 @@ public class ChatService {
 		
 		return list;
 	}
+	
+	//해당 유저한테 온 쪽지 보기
+	public List<Message> getNoteListByUserid(String to_userid){
+		List<Message> list = null;
+		try {
+			RoomDao roomdao = sqlsession.getMapper(RoomDao.class);
+			list = roomdao.getNoteByUserid(to_userid);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return list;
+	}
+	
+	//쪽지 읽음 처리
+	public int readNote(String to_userid) {
+		int result = 0;
+		
+		try {
+			RoomDao roomdao = sqlsession.getMapper(RoomDao.class);
+			result = roomdao.readNote(to_userid);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
 
 }

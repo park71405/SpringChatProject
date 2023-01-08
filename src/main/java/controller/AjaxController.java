@@ -1,5 +1,6 @@
 package controller;
 
+import java.security.Principal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -110,6 +111,23 @@ public class AjaxController {
 		
 		return list;
 	}
+	
+	//쪽지 읽음 처리
+	@RequestMapping(value="noteread.htm", method=RequestMethod.POST)
+	public String readNote(@RequestBody Message message, Principal principal) {
+		
+		String str = "";
+		
+		int result = chatservice.readNote(principal.getName());
+		
+		if(result > 0) {
+			str = "success";
+		}else {
+			str = "false";
+		}
+		
+		return str;
+	}
 
 	//Client가 SEND할 수 있는 경로
 	//stompConfig에서 설정한 applicationDestinationPrefixes와 @MessageMapping 경로가 병합됨
@@ -140,8 +158,8 @@ public class AjaxController {
 		
 		chatservice.sendMessage(message);
 		
-		System.out.println("쪽지 보냅니다!");
-		
+		message.setContent("쪽지를 전송했습니다.");
+		template.convertAndSend("/sub/chat/userid/" + message.getUserid(), message);
 	}
 	
 }

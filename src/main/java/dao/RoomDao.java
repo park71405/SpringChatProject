@@ -36,4 +36,10 @@ public interface RoomDao {
 	//해당 방의 기존 메시지 읽어오기
 	List<Message> getMessageListByRoomno(int roomno) throws ClassNotFoundException, SQLException;
 	
+	//쪽지 읽기
+	List<Message> getNoteByUserid(String to_userid) throws ClassNotFoundException, SQLException;
+	
+	//쪽지 읽음 처리
+	int readNote(String to_userid) throws ClassNotFoundException, SQLException;
+	
 }

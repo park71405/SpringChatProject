@@ -28,6 +28,11 @@
 	<a href="${pageContext.request.contextPath}/chatroom.htm">채팅 방 입장</a><br>
 	<hr />
 	<a href="${pageContext.request.contextPath}/memberlist.htm">1:1 채팅</a><br>
+	<se:authorize access="hasAnyRole('ROLE_ADMIN', 'ROLE_USER')">
+	<hr />
+	<a href="${pageContext.request.contextPath}/notelist.htm">쪽지함</a><br>
+	</se:authorize>
+	
 	
 </body>
 </html>
