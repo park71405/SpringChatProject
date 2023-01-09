@@ -32,7 +32,8 @@
 	<hr />
 	<a href="${pageContext.request.contextPath}/notelist.htm">쪽지함</a><br>
 	</se:authorize>
-	
+	<hr />
+	<a href="${pageContext.request.contextPath}/naver/login.htm">네이버 로그인</a><br>
 	
 </body>
 </html>
